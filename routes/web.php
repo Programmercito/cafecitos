@@ -24,6 +24,21 @@ Route::prefix('api/')->group(function () {
     Route::delete('/auth/logout', [UsersController::class, 'logout'])->middleware('auth');
 
     // -----------------------
+    // Lecturas generales (auth)
+    // -----------------------
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/users/types', [UsersController::class, 'usersType']);
+        Route::get('/orders/types', [OrdersController::class, 'ordersType']);
+        Route::get('/order-details/types', [OrdersDetailsController::class, 'detailsType']);
+        Route::get('/products/types', [ProductsController::class, 'productosType']);
+
+        // Productos (lectura)
+        Route::get('/products', [ProductsController::class, 'index']);
+        Route::get('/products/{id}/image', [ProductsController::class, 'showImage']);
+        Route::get('/products/{id}', [ProductsController::class, 'show']);
+    });
+
+    // -----------------------
     // Admin: Usuarios
     // -----------------------
     Route::middleware(['auth', 'role:ADMINISTRADOR'])->group(function () {
@@ -65,7 +80,6 @@ Route::prefix('api/')->group(function () {
     Route::middleware(['auth', 'role:ADMINISTRADOR,WAITER,IN_CHARGE'])->group(function () {
         Route::post('/orders', [OrdersController::class, 'store']);
         Route::get('/orders/{id}', [OrdersController::class, 'show']);
-
         Route::get('/order-details/{id}', [OrdersDetailsController::class, 'show']);
         Route::get('/order-waiters/{id}', [OrdersWaitersController::class, 'show']);
         Route::patch('/orders/{id}/status/{status}', [OrdersController::class, 'changeStatus']);
@@ -84,20 +98,5 @@ Route::prefix('api/')->group(function () {
         Route::delete('/order-waiters/{id}', [OrdersWaitersController::class, 'delete']);
 
         Route::get('/me/orders', [OrdersController::class, 'getMyOrders']);
-    });
-
-    // -----------------------
-    // Lecturas generales (auth)
-    // -----------------------
-    Route::middleware(['auth'])->group(function () {
-        // Productos (lectura)
-        Route::get('/products/{id}/image', [ProductsController::class, 'showImage']);
-        Route::get('/products/{id}', [ProductsController::class, 'show']);
-        Route::get('/products', [ProductsController::class, 'index']);
-
-        Route::get('/users/types', [UsersController::class, 'usersType']);
-        Route::get('/orders/types', [OrdersController::class, 'ordersType']);
-        Route::get('/order-details/types', [OrdersDetailsController::class, 'detailsType']);
-        Route::get('/products/types', [ProductsController::class, 'productosType']);
     });
 });

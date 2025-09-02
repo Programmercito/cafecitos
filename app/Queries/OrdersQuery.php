@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class OrdersQuery
 {
-    protected $paginatorService;
+    protected PaginatorService $paginatorService;
 
     public function __construct(PaginatorService $paginatorService)
     {
