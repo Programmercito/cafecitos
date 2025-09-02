@@ -142,7 +142,13 @@ class OrdersController extends Controller
             'Procesado' => 'PROCESSED',
             'Anulado' => 'VOIDED'
         ];
-        return $listaDeEstados;
+
+        $result = [];
+        foreach ($listaDeEstados as $name => $value) {
+            $result[] = ['name' => $name, 'value' => $value];
+        }
+
+        return $result;
     }
 
     /**

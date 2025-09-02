@@ -245,6 +245,12 @@ class ProductsController extends Controller
             'Reposición' => 'REPOSICION',
             'Otros' => 'OTROS'
         ];
-        return response()->json($listaDeCategorias);
+
+        $result = [];
+        foreach ($listaDeCategorias as $name => $value) {
+            $result[] = ['name' => $name, 'value' => $value];
+        }
+
+        return response()->json($result);
     }
 }

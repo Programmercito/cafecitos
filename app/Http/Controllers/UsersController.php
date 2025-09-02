@@ -264,10 +264,17 @@ class UsersController extends Controller
      */
     public function usersType()
     {
-        return [
+        $userTypes = [
             'Administrador' => 'ADMINISTRATOR',
             'Mesero' => 'WAITER',
             'Encargado' => 'IN_CHARGE'
         ];
+
+        $result = [];
+        foreach ($userTypes as $name => $value) {
+            $result[] = ['name' => $name, 'value' => $value];
+        }
+
+        return $result;
     }
 }

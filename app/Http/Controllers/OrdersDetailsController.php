@@ -185,6 +185,12 @@ class OrdersDetailsController extends Controller
     public function detailsType()
     {
         $listaDeTipos = $this->type();
-        return response()->json($listaDeTipos, 200);
+
+        $result = [];
+        foreach ($listaDeTipos as $name => $value) {
+            $result[] = ['name' => $name, 'value' => $value];
+        }
+
+        return response()->json($result, 200);
     }
 }
