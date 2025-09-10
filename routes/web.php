@@ -41,7 +41,7 @@ Route::prefix('api/')->group(function () {
     // -----------------------
     // Admin: Usuarios
     // -----------------------
-    Route::middleware(['auth', 'role:ADMINISTRADOR'])->group(function () {
+    Route::middleware(['auth', 'role:ADMINISTRATOR'])->group(function () {
         Route::post('/users', [UsersController::class, 'store']);
         Route::get('/users', [UsersController::class, 'index']);
         Route::get('/users/{id}', [UsersController::class, 'show']);
@@ -52,7 +52,7 @@ Route::prefix('api/')->group(function () {
     // -----------------------
     // Admin: Productos (escritura)
     // -----------------------
-    Route::middleware(['auth', 'role:ADMINISTRADOR'])->group(function () {
+    Route::middleware(['auth', 'role:ADMINISTRATOR'])->group(function () {
         Route::post('/products', [ProductsController::class, 'store']);
         Route::put('/products/{id}', [ProductsController::class, 'update']);
         Route::patch('/products/{id}/status', [ProductsController::class, 'changeStatus']);
@@ -62,7 +62,7 @@ Route::prefix('api/')->group(function () {
     // -----------------------
     // Admin: Ordenes
     // -----------------------
-    Route::middleware(['auth', 'role:ADMINISTRADOR'])->group(function () {
+    Route::middleware(['auth', 'role:ADMINISTRATOR'])->group(function () {
         Route::get('/orders/move-to-commissiong', [OrdersController::class, 'moveToCommissiong']);
         Route::get('/orders/move-to-processed', [OrdersController::class, 'moveToProcessed']);
     });
@@ -70,14 +70,14 @@ Route::prefix('api/')->group(function () {
     // -----------------------
     // Histórico de órdenes (Admin + Encargado)
     // -----------------------
-    Route::middleware(['auth', 'role:ADMINISTRADOR,IN_CHARGE'])->group(function () {
+    Route::middleware(['auth', 'role:ADMINISTRATOR,IN_CHARGE'])->group(function () {
         Route::get('/orders/history', [OrdersController::class, 'getAll']);
     });
 
     // -----------------------
     // Órdenes (Admin + Mozo + Encargado)
     // -----------------------
-    Route::middleware(['auth', 'role:ADMINISTRADOR,WAITER,IN_CHARGE'])->group(function () {
+    Route::middleware(['auth', 'role:ADMINISTRATOR,WAITER,IN_CHARGE'])->group(function () {
         Route::post('/orders', [OrdersController::class, 'store']);
         Route::get('/orders/{id}', [OrdersController::class, 'show']);
         Route::get('/order-details/{id}', [OrdersDetailsController::class, 'show']);
