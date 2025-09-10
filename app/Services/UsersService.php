@@ -64,13 +64,18 @@ class UsersService
         return false;
     }
 
-    public function getUsers($active = null, $perPage = 15, $page = 1)
+    public function getUsers($active = null, $perPage = 15, $page = 1, $username = null)
     {
         $query = Users::query();
 
         if (!is_null($active)) {
             $query->where('is_active', $active ? 1 : 0);
         }
+
+        if (!is_null($username)) {
+            $query->where('username', 'like', "%{$username}%");
+        }
+
         $paginator = $query->paginate($perPage, ['*'], 'page', $page);
         return $this->paginatorService->paginate($paginator);
     }

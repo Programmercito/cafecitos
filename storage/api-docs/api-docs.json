@@ -1153,6 +1153,13 @@
                         }
                     },
                     {
+                        "name": "username",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "per_page",
                         "in": "query",
                         "schema": {

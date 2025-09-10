@@ -203,6 +203,7 @@ class UsersController extends Controller
      *     tags={"Users"},
      *     security={{"csrf":{}}},
      *     @OA\Parameter(name="active", in="query", @OA\Schema(type="boolean")),
+     *     @OA\Parameter(name="username", in="query", @OA\Schema(type="string")),
      *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Successful operation")
@@ -211,10 +212,11 @@ class UsersController extends Controller
     public function index(Request $request): JsonResponse
     {
         $active = $request->query('active');
+        $username = $request->query('username');
         $perPage = $request->query('per_page', 15);
         $page = $request->query('page', 1);
 
-        $users = $this->usersService->getUsers($active, $perPage, $page);
+        $users = $this->usersService->getUsers($active, $perPage, $page, $username);
 
         return response()->json($users);
     }
