@@ -279,4 +279,56 @@ class UsersController extends Controller
 
         return $result;
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/auth/change-password",
+     *     summary="Change current user's password",
+     *     tags={"Auth"},
+     *     security={{"csrf":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"current_password", "new_password", "new_password_confirmation"},
+     *             @OA\Property(property="current_password", type="string", format="password"),
+     *             @OA\Property(property="new_password", type="string", format="password"),
+     *             @OA\Property(property="new_password_confirmation", type="string", format="password")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password changed successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid credentials"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
+     */
+    public function changePassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'Invalid current password'], 401);
+        }
+
+        $updatedUser = $this->usersService->changePassword($user->id, $request->new_password);
+
+        if ($updatedUser) {
+            return response()->json(['message' => 'Password changed successfully']);
+        } else {
+            return response()->json(['message' => 'Failed to change password'], 500);
+        }
+    }
 }
+

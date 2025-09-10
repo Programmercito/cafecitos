@@ -79,4 +79,15 @@ class UsersService
         $paginator = $query->paginate($perPage, ['*'], 'page', $page);
         return $this->paginatorService->paginate($paginator);
     }
+
+    public function changePassword($userId, $newPassword)
+    {
+        $user = Users::find($userId);
+        if ($user) {
+            $user->password = Hash::make($newPassword);
+            $user->save();
+            return $user;
+        }
+        return null;
+    }
 }

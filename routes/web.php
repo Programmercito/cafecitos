@@ -22,6 +22,7 @@ Route::prefix('api/')->group(function () {
     // Auth pública
     Route::post('/auth/login', [UsersController::class, 'login']);
     Route::delete('/auth/logout', [UsersController::class, 'logout'])->middleware('auth');
+    Route::post('/auth/change-password', [UsersController::class, 'changePassword'])->middleware('auth');
 
     // -----------------------
     // Lecturas generales (auth)
