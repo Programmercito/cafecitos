@@ -22,16 +22,10 @@ class OrdersQuery
         if ($waiter_id) {
             $query->where('waiter_id', $waiter_id);
         }
-        if ($date_from && $date_to) {
-            $query->whereBetween('order_date', $date_from, $date_to);
-        }
-        $query->orderBy('desc');
-        if ($sort) {
-            $query->orderBy($sort);
-        }
-        if ($waiter_id) {
-            $query->where('waiter_id', $waiter_id);
-        }
+        $this->applyDateFilter($query, $date_from, $date_to);
+
+        $this->applySorting($query, $sort);
+
         $paginator = $query->paginate($lenPage, ['*'], 'page', $page);
         return $this->paginatorService->paginate($paginator);
     }
@@ -65,7 +59,9 @@ class OrdersQuery
         }
 
         $this->applyDateFilter($query, $date_from, $date_to);
-        $this->applySorting($query, $sort);
+        // ordeno por id y sort es desc o asc
+        $this->applySorting($query, "id:".$sort);
+
 
         $paginator = $query->paginate($lenPage, ['*'], 'page', $page);
 
@@ -85,14 +81,8 @@ class OrdersQuery
 
     protected function applySorting($query, $sort): void
     {
-        if ($sort) {
-            // Permite "col" o "col:desc"
-            [$col, $dir] = array_pad(explode(':', $sort, 2), 2, 'asc');
-            $dir = strtolower($dir) === 'desc' ? 'desc' : 'asc';
-            $query->orderBy($col, $dir);
-        } else {
-            $query->orderByDesc('id');
-        }
+        $direction = strtolower($sort) === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('id', $direction);
     }
 
     public function moveAllPaidToCommissiong(): int
