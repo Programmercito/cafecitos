@@ -330,5 +330,32 @@ class UsersController extends Controller
             return response()->json(['message' => 'Failed to change password'], 500);
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/users/waiters",
+     *     summary="Get all active waiters or in-charge users, with optional name search",
+     *     tags={"Users"},
+     *     security={{"csrf":{}}},
+     *     @OA\Parameter(name="active", in="query", @OA\Schema(type="boolean"), description="Filter by active status"),
+     *     @OA\Parameter(name="username", in="query", @OA\Schema(type="string"), description="Search by username (partial match)"),
+     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer"), description="Number of items per page"),
+     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer"), description="Page number"),
+     *     @OA\Response(response=200, description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/User")
+     *         )
+     *     )
+     * )
+     */
+    public function waiters(Request $request): JsonResponse
+    {
+        $username = $request->query('username');
+
+        $waiters = $this->usersService->getWaiters($username);
+
+        return response()->json($waiters);
+    }
 }
 

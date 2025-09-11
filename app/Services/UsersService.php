@@ -90,4 +90,10 @@ class UsersService
         }
         return null;
     }
+
+    public function getWaiters($username = null)
+    {
+        $query = $this->usersQuery->getWaiters($username);
+        return $query->get();
+    }
 }
