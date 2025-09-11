@@ -24,6 +24,6 @@ class UsersQuery
             $query->where('username', 'like', "%{$username}%");
         }
 
-        return $query;
+        return $query->orderBy('username', 'asc');
     }
 }

@@ -91,7 +91,7 @@ class UsersService
         return null;
     }
 
-    public function getWaiters($username = null)
+    public function getWaiters($username)
     {
         $query = $this->usersQuery->getWaiters($username);
         return $query->get();

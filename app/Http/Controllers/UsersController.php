@@ -352,7 +352,9 @@ class UsersController extends Controller
     public function waiters(Request $request): JsonResponse
     {
         $username = $request->query('username');
-
+        if (!isset($username)){
+            $username = '';
+        }
         $waiters = $this->usersService->getWaiters($username);
 
         return response()->json($waiters);
