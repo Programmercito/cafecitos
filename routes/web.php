@@ -80,7 +80,6 @@ Route::prefix('api/')->group(function () {
     // Órdenes (Admin + Mozo + Encargado)
     // -----------------------
     Route::middleware(['auth', 'role:ADMINISTRATOR,WAITER,IN_CHARGE'])->group(function () {
-        Route::post('/orders', [OrdersController::class, 'store']);
         Route::get('/orders/{id}', [OrdersController::class, 'show']);
         Route::get('/order-details/{id}', [OrdersDetailsController::class, 'show']);
         Route::get('/order-waiters/{id}', [OrdersWaitersController::class, 'show']);
@@ -91,6 +90,7 @@ Route::prefix('api/')->group(function () {
     // Detalles y asignaciones (Mozo + Encargado)
     // -----------------------
     Route::middleware(['auth', 'role:WAITER,IN_CHARGE'])->group(function () {
+        Route::post('/orders', [OrdersController::class, 'store']);
         Route::post('/order-details', [OrdersDetailsController::class, 'store']);
         Route::put('/order-details/{id}', [OrdersDetailsController::class, 'update']);
         Route::delete('/order-details/{id}', [OrdersDetailsController::class, 'delete']);
