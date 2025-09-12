@@ -36,7 +36,8 @@ class OrdersService
         $sort = $params['sort'];
         $page = $params['page'];
         $lenPage = $params['lenPage'];
-        return $this->ordersQuery->getMyOrders($status, $waiter_id, $date_from, $date_to, $sort, $page, $lenPage);
+        $type = $params['type'];
+        return $this->ordersQuery->getMyOrders($status, $waiter_id, $date_from, $date_to, $sort, $page, $lenPage, $type);
     }
 
     public function find($id)

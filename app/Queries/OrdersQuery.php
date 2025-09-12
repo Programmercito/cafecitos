@@ -34,7 +34,7 @@ class OrdersQuery
      * Misma firma, pero aplica (orders.waiter_id = ? OR EXISTS (...)) usando el mismo waiter_id.
      * Si $waiter_id es null/0, NO aplica el bloque OR (devuelve por status/fechas/orden).
      */
-    public function getMyOrders($status, $waiter_id, $date_from, $date_to, $sort, $page, $lenPage)
+    public function getMyOrders($status, $waiter_id, $date_from, $date_to, $sort, $page, $lenPage, $type)
     {
         $ordersTable = (new Orders())->getTable();
 
@@ -42,7 +42,7 @@ class OrdersQuery
             ->where("{$ordersTable}.status", $status);
 
         if ($waiter_id) {
-            $query->where(function ($q) use ($waiter_id, $ordersTable) {
+            $query->where(function ($q) use ($waiter_id, $ordersTable, $type) {
                 // Opción A: waiter asignado directamente en ORDERS
                 $q
                     ->where("{$ordersTable}.waiter_id", $waiter_id)
@@ -54,7 +54,8 @@ class OrdersQuery
                             ->join('ORDER_WAITERS as ow', 'ow.order_det_id', '=', 'od.id')
                             ->where('ow.waiter_id', $waiter_id)
                             ->whereColumn('od.order_id', "{$ordersTable}.id");
-                    });
+                    })
+                    ->orWhereRaw("'IN_CHARGE' = ?", [$type]);
             });
         }
 

@@ -212,7 +212,8 @@ class OrdersController extends Controller
             'date_to' => $request->query('date_to'),
             'sort' => $request->query('sort'),
             'page' => $request->query('page', 1),
-            'lenPage' => $request->query('lenPage', 15)
+            'lenPage' => $request->query('lenPage', 15),
+            'type' => $user->type
         ];
         return response()->json($this->ordersService->getMyOrders($params));
     }
