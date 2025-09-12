@@ -46,7 +46,8 @@ class OrdersService
 
     public function create(array $data)
     {
-        return Orders::create($data);
+        $order = Orders::create($data);
+        return $order->fresh();
     }
 
     public function update($id, array $data)
