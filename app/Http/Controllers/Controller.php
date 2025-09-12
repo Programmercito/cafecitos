@@ -69,7 +69,7 @@ abstract class Controller
         } else if ($status === 'VOIDED' && !in_array($order->status, ['CLOSED', 'PAID', 'COMISSIONED'])) {
             return response()->json(['message' => 'Orden no puede ser anulada'], 400);
         }
-        
+
         $typeuser = Auth::user()->type;
         if ($status === 'CLOSED' && !in_array($typeuser, ['IN_CHARGE', 'WAITER', 'ADMINISTRATOR'])) {
             return response()->json(['message' => 'No tiene permisos para cerrar esta orden'], 403);
@@ -81,6 +81,10 @@ abstract class Controller
             return response()->json(['message' => 'No tiene permisos para marcar esta orden como procesada'], 403);
         } else if ($status === 'VOIDED' && !in_array($typeuser, ['ADMINISTRATOR', 'WAITER', 'IN_CHARGE'])) {
             return response()->json(['message' => 'No tiene permisos para anular esta orden'], 403);
+        }
+
+        if ($status === 'CLOSED' && $order->waiter_id !== Auth::user()->id) {
+            return response()->json(['message' => 'No tiene permisos para cerrar esta orden'], 403);
         }
     }
 }
