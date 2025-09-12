@@ -3,15 +3,20 @@
 namespace App\Services;
 
 use App\Models\OrdersDetails;
+use App\Queries\OrdersDetailsQuery;
 use App\Services\ProductsService;
 
 class OrdersDetailsService extends Service
 {
     private ProductsService $productsService;
+    private OrdersDetailsQuery $ordersDetailsQuery;
 
-    public function __construct(ProductsService $productsService)
-    {
+    public function __construct(
+        ProductsService $productsService,
+        OrdersDetailsQuery $ordersDetailsQuery
+    ) {
         $this->productsService = $productsService;
+        $this->ordersDetailsQuery = $ordersDetailsQuery;
     }
 
     public function getAll()
@@ -19,9 +24,9 @@ class OrdersDetailsService extends Service
         return OrdersDetails::all();
     }
 
-    public function find($id)
+    public function find($orderId)
     {
-        return OrdersDetails::find($id);
+        return $this->ordersDetailsQuery->getByOrderId($orderId);
     }
 
     public function create(array $data)
