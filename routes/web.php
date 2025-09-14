@@ -74,6 +74,9 @@ Route::prefix('api/')->group(function () {
     // -----------------------
     Route::middleware(['auth', 'role:ADMINISTRATOR,IN_CHARGE'])->group(function () {
         Route::get('/orders/history', [OrdersController::class, 'getAll']);
+        Route::put('/order-details/{id}', [OrdersDetailsController::class, 'update']);
+        Route::delete('/order-details/{id}', [OrdersDetailsController::class, 'delete']);
+
     });
 
     // -----------------------
@@ -92,8 +95,6 @@ Route::prefix('api/')->group(function () {
     Route::middleware(['auth', 'role:WAITER,IN_CHARGE'])->group(function () {
         Route::post('/orders', [OrdersController::class, 'store']);
         Route::post('/order-details', [OrdersDetailsController::class, 'store']);
-        Route::put('/order-details/{id}', [OrdersDetailsController::class, 'update']);
-        Route::delete('/order-details/{id}', [OrdersDetailsController::class, 'delete']);
 
         Route::post('/order-waiters', [OrdersWaitersController::class, 'store']);
         Route::put('/order-waiters/{id}', [OrdersWaitersController::class, 'update']);
