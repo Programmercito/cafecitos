@@ -55,7 +55,8 @@ class OrdersQuery
                             ->where('ow.waiter_id', $waiter_id)
                             ->whereColumn('od.order_id', "{$ordersTable}.id");
                     })
-                    ->orWhereRaw("'IN_CHARGE' = ?", [$type]);
+                    ->orWhereRaw("'IN_CHARGE' = ?", [$type])
+                    ->orWhereRaw("'ADMINISTRATOR' = ?", [$type]);
             });
         }
 
