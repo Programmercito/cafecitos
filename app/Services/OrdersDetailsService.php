@@ -40,13 +40,12 @@ class OrdersDetailsService extends Service
     public function update($id, array $data)
     {
         $data['price'] = $this->calculatePrice($data);
-        $orderDetail = OrdersDetails::with('order')->findOrFail($id);
+        $orderDetail = OrdersDetails::find($id);
         $this->validateModify($orderDetail->order);
         if (!$data['type']==='WAITER'){
             $orderDetail->orderWaiters()->delete();
         }
         $orderDetail->update($data);
-
         return $orderDetail;
     }
 

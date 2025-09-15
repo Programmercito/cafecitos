@@ -86,6 +86,7 @@ class OrdersDetailsController extends Controller
     {
         $rules = [
             'product_id' => 'required|integer',
+            'order_id' => 'required|integer',
             'quantity' => 'required|integer',
             'type' => 'required|string',
             'observation' => 'nullable|string',
