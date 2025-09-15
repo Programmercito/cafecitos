@@ -54,6 +54,20 @@ class OrdersDetailsController extends Controller
         }
         try {
             $orderDetail = $this->ordersDetailsService->create($validatedData);
+            if ($orderDetail->type === 'WAITER') {
+                $previousOrderDetail = \App\Models\OrdersDetails::where('id', '<', $orderDetail->id)
+                    ->where('type', 'WAITER')
+                    ->latest('id')
+                    ->first();
+
+                if ($previousOrderDetail) {
+                    $waiterIds = $previousOrderDetail->waiters()->pluck('users.id');
+                    if ($waiterIds->isNotEmpty()) {
+                        $orderDetail->waiters()->attach($waiterIds);
+                        $orderDetail->refresh();
+                    }
+                }
+            }
         } catch (OrderIsClosedException $e) {
             return response()->json(['message' => $e->getMessage()], 409);
         }
