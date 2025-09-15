@@ -17,7 +17,7 @@ class UsersQuery
     public function getWaiters(string $username): Builder
     {
         $query = Users::query()
-            ->whereIn('type', ['WAITER', 'IN_CHARGE'])
+            ->whereIn('type', ['WAITER', 'IN_CHARGE','ADMINISTRATOR'])
             ->where('is_active', 1);
 
         if (!is_null($username)) {

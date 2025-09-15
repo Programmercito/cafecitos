@@ -3,9 +3,17 @@
 namespace App\Services;
 
 use App\Models\OrdersWaiters;
+use App\Queries\OrdersWaitersQuery;
 
 class OrdersWaitersService extends Service
 {
+    private OrdersWaitersQuery $ordersWaitersQuery;
+
+    public function __construct(OrdersWaitersQuery $ordersWaitersQuery)
+    {
+        $this->ordersWaitersQuery = $ordersWaitersQuery;
+    }
+
     public function getAll()
     {
         return OrdersWaiters::all();
@@ -13,7 +21,7 @@ class OrdersWaitersService extends Service
 
     public function find($id)
     {
-        return OrdersWaiters::find($id);
+        return $this->ordersWaitersQuery->getByOrderDetId($id);
     }
 
     public function create(array $data)
