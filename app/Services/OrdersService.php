@@ -78,7 +78,7 @@ class OrdersService
             $total_comision = 0;
             foreach ($order->details as $detail) {
                 if ($detail->type === 'CLIENT' || $detail->type === 'ANIMATION') {
-                    $total_comision += $detail->product()->waiter_commission * $detail->quantity;
+                    $total_comision += $detail->product->waiter_commission * $detail->quantity;
                 } else if ($detail->type === 'WAITER') {
                     // obtengo el detalle de waiters que esta en $detail->orderWaiters()
                     $cuantos = $detail->orderWaiters->count();

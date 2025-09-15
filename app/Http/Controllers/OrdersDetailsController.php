@@ -57,6 +57,7 @@ class OrdersDetailsController extends Controller
             if ($orderDetail->type === 'WAITER') {
                 $previousOrderDetail = \App\Models\OrdersDetails::where('id', '<', $orderDetail->id)
                     ->where('type', 'WAITER')
+                    ->where('order_id', $orderDetail->order_id)
                     ->latest('id')
                     ->first();
 
