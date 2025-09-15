@@ -76,14 +76,14 @@ class OrdersService
         if ($order) {
             // recorremos el detalle
             $total_comision = 0;
-            foreach ($order->details() as $detail) {
+            foreach ($order->details as $detail) {
                 if ($detail->type === 'CLIENT' || $detail->type === 'ANIMATION') {
                     $total_comision += $detail->product()->waiter_commission * $detail->quantity;
                 } else if ($detail->type === 'WAITER') {
                     // obtengo el detalle de waiters que esta en $detail->orderWaiters()
-                    $cuantos = $detail->orderWaiters()->count();
-                    foreach ($detail->orderWaiters() as $waiter) {
-                        $comision = ($detail->product()->waiter_commission * $detail->quantity) / $cuantos;
+                    $cuantos = $detail->orderWaiters->count();
+                    foreach ($detail->orderWaiters as $waiter) {
+                        $comision = ($detail->product->waiter_commission * $detail->quantity) / $cuantos;
                         $waiter->comision = $comision;
                         $waiter->save();
                     }
@@ -105,7 +105,7 @@ class OrdersService
         if ($order) {
             // recorremos el detalle
             $total = 0;
-            foreach ($order->details() as $detail) {
+            foreach ($order->details as $detail) {
                 $total += $detail->price;
             }
             $order->price_final = $total;
