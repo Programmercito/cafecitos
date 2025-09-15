@@ -24,9 +24,14 @@ class OrdersDetailsService extends Service
         return OrdersDetails::all();
     }
 
-    public function find($orderId)
+    public function findbyOrderId($orderId)
     {
         return $this->ordersDetailsQuery->getByOrderId($orderId);
+    }
+
+    public function find($id)
+    {
+        return OrdersDetails::find($id);
     }
 
     public function create(array $data)
@@ -42,7 +47,7 @@ class OrdersDetailsService extends Service
         $data['price'] = $this->calculatePrice($data);
         $orderDetail = OrdersDetails::find($id);
         $this->validateModify($orderDetail->order);
-        if (!$data['type']==='WAITER'){
+        if (!$data['type'] === 'WAITER') {
             $orderDetail->orderWaiters()->delete();
         }
         $orderDetail->update($data);

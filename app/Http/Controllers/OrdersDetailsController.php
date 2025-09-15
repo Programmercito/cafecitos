@@ -143,7 +143,7 @@ class OrdersDetailsController extends Controller
      */
     public function show($id)
     {
-        $orderDetail = $this->ordersDetailsService->find($id);
+        $orderDetail = $this->ordersDetailsService->findbyOrderId($id);
         if ($orderDetail) {
             return response()->json($orderDetail, 200);
         } else {
