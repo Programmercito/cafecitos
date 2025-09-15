@@ -38,7 +38,7 @@ class OrdersDetailsService extends Service
     {
         $data['price'] = $this->calculatePrice($data);
         $orderDetail = new OrdersDetails($data);
-        $this->validateModify($orderDetail->order);
+        $this->validateModify($orderDetail->order, 'new');
         return OrdersDetails::create($data);
     }
 
@@ -46,7 +46,7 @@ class OrdersDetailsService extends Service
     {
         $data['price'] = $this->calculatePrice($data);
         $orderDetail = OrdersDetails::find($id);
-        $this->validateModify($orderDetail->order);
+        $this->validateModify($orderDetail->order, 'edit');
         if (!$data['type'] === 'WAITER') {
             $orderDetail->orderWaiters()->delete();
         }
@@ -57,7 +57,7 @@ class OrdersDetailsService extends Service
     public function delete($id)
     {
         $orderDetail = OrdersDetails::find($id);
-        $this->validateModify($orderDetail->order);
+        $this->validateModify($orderDetail->order, 'edit');
         if ($orderDetail) {
             return $orderDetail->delete();
         }

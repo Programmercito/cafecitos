@@ -68,6 +68,10 @@ class OrdersDetailsController extends Controller
                         $orderDetail->refresh();
                     }
                 }
+            }else{
+                // elimino el detalle de OrdersWaiters si es otro valor
+                $orderDetail->waiters()->detach();
+                $orderDetail->refresh();
             }
         } catch (OrderIsClosedException $e) {
             return response()->json(['message' => $e->getMessage()], 409);

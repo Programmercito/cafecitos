@@ -32,7 +32,7 @@ class OrdersWaitersService extends Service
     {
         $orderWaiter = new OrdersWaiters($data);
         $detail = $this->ordersDetailsService->find($data['order_det_id']);
-        $this->validateModify($detail->order);
+        $this->validateModify($detail->order, 'new');
         return OrdersWaiters::create($data);
     }
 
@@ -41,7 +41,7 @@ class OrdersWaitersService extends Service
         $orderWaiter = OrdersWaiters::find($id);
         if ($orderWaiter) {
             $detail = $this->ordersDetailsService->find($data['order_det_id']);
-            $this->validateModify($detail->order);
+            $this->validateModify($detail->order, 'edit');
             $orderWaiter->update($data);
         }
         return $orderWaiter;
@@ -52,7 +52,7 @@ class OrdersWaitersService extends Service
         $orderWaiter = OrdersWaiters::find($id);
         if ($orderWaiter) {
             $detail = $this->ordersDetailsService->find($orderWaiter->order_det_id);
-            $this->validateModify($detail->order);
+            $this->validateModify($detail->order, 'edit');
             return $orderWaiter->delete();
         }
         return false;

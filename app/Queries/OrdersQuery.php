@@ -61,8 +61,7 @@ class OrdersQuery
 
         $this->applyDateFilter($query, $date_from, $date_to);
         // ordeno por id y sort es desc o asc
-        $this->applySorting($query, "id:".$sort);
-
+        $this->applySorting($query, 'id:' . $sort);
 
         $paginator = $query->paginate($lenPage, ['*'], 'page', $page);
 
@@ -71,6 +70,11 @@ class OrdersQuery
 
     protected function applyDateFilter($query, $date_from, $date_to): void
     {
+        // previamente el date_to le sumo un dia para que sea ese dia a las 00:00
+        if ($date_to) {
+            $fechaNueva = date('Y-m-d', strtotime($date_to . ' +1 day'));
+            $date_to=$fechaNueva;
+        }
         if ($date_from && $date_to) {
             $query->whereBetween('order_date', [$date_from, $date_to]);
         } elseif ($date_from) {
