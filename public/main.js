@@ -5214,7 +5214,7 @@ var appRoutes = [
     ]
   },
   { path: "notfound", component: Notfound },
-  { path: "auth", loadChildren: () => import("./chunk-DIHNU7JP.js") },
+  { path: "auth", loadChildren: () => import("./chunk-AVGSL4EJ.js") },
   { path: "**", redirectTo: "/notfound" }
 ];
 
