@@ -174,12 +174,9 @@ class OrdersController extends Controller
     {
         $params = [
             'status' => $request->query('status'),
-            'waiter_id' => $request->query('waiter_id'),
             'date_from' => $request->query('date_from'),
             'date_to' => $request->query('date_to'),
             'sort' => $request->query('sort'),
-            'page' => $request->query('page', 1),
-            'lenPage' => $request->query('lenPage', 15)
         ];
         return response()->json($this->ordersService->getAll($params));
     }

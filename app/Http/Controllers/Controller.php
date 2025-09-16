@@ -73,13 +73,16 @@ abstract class Controller
         $typeuser = Auth::user()->type;
         if ($status === 'CLOSED' && !in_array($typeuser, ['IN_CHARGE', 'WAITER', 'ADMINISTRATOR'])) {
             return response()->json(['message' => 'No tiene permisos para cerrar esta orden'], 403);
-        } else if ($status === 'PAID' && !in_array($typeuser, ['IN_CHARGE','ADMINISTRATOR'])) {
+        } else if ($status === 'PAID' && !in_array($typeuser, ['IN_CHARGE', 'ADMINISTRATOR'])) {
             return response()->json(['message' => 'No tiene permisos para marcar esta orden como pagada'], 403);
         } else if ($status === 'COMISSIONED' && !in_array($typeuser, ['ADMINISTRATOR'])) {
             return response()->json(['message' => 'No tiene permisos para marcar esta orden como comisionada'], 403);
         } else if ($status === 'PROCESSED' && !in_array($typeuser, ['ADMINISTRATOR'])) {
             return response()->json(['message' => 'No tiene permisos para marcar esta orden como procesada'], 403);
-        } else if ($status === 'VOIDED' && !in_array($typeuser, ['ADMINISTRATOR', 'IN_CHARGE'])) {
+        } else if (
+            !($status === 'VOIDED' && $typeuser === 'ADMINISTRATOR' && $order->status === 'COMISSIONED') &&
+            !($status === 'VOIDED' && in_array($typeuser, ['IN_CHARGE', 'ADMINISTRATOR']) && in_array($order->status, ['CLOSED', 'PAID']))
+        ) {
             return response()->json(['message' => 'No tiene permisos para anular esta orden'], 403);
         }
 

@@ -65,8 +65,8 @@ Route::prefix('api/')->group(function () {
     // Admin: Ordenes
     // -----------------------
     Route::middleware(['auth', 'role:ADMINISTRATOR'])->group(function () {
-        Route::get('/orders/move-to-commissiong', [OrdersController::class, 'moveToCommissiong']);
-        Route::get('/orders/move-to-processed', [OrdersController::class, 'moveToProcessed']);
+        Route::put('/orders/move-to-commissiong', [OrdersController::class, 'moveToCommissiong']);
+        Route::put('/orders/move-to-processed', [OrdersController::class, 'moveToProcessed']);
     });
 
     // -----------------------

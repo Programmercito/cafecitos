@@ -18,13 +18,10 @@ class OrdersService
     public function getAll(array $params)
     {
         $status = $params['status'];
-        $waiter_id = $params['waiter_id'];
         $date_from = $params['date_from'];
         $date_to = $params['date_to'];
         $sort = $params['sort'];
-        $page = $params['page'];
-        $lenPage = $params['lenPage'];
-        return $this->ordersQuery->getOrders($status, $waiter_id, $date_from, $date_to, $sort, $page, $lenPage);
+        return $this->ordersQuery->getOrders($status, $date_from, $date_to, $sort);
     }
 
     public function getMyOrders(array $params)

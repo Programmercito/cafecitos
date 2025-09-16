@@ -5,6 +5,7 @@ namespace App\Queries;
 use App\Models\Orders;
 use App\Resources\PaginatorService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrdersQuery
 {
@@ -15,19 +16,13 @@ class OrdersQuery
         $this->paginatorService = $paginatorService;
     }
 
-    public function getOrders($status, $waiter_id, $date_from, $date_to, $sort, $page, $lenPage)
+    public function getOrders($status, $date_from, $date_to, $sort)
     {
         $query = Orders::query();
         $query->where('status', $status);
-        if ($waiter_id) {
-            $query->where('waiter_id', $waiter_id);
-        }
         $this->applyDateFilter($query, $date_from, $date_to);
-
         $this->applySorting($query, $sort);
-
-        $paginator = $query->paginate($lenPage, ['*'], 'page', $page);
-        return $this->paginatorService->paginate($paginator);
+        return $query->get();
     }
 
     /**
@@ -74,7 +69,7 @@ class OrdersQuery
         // previamente el date_to le sumo un dia para que sea ese dia a las 00:00
         if ($date_to) {
             $fechaNueva = date('Y-m-d', strtotime($date_to . ' +1 day'));
-            $date_to=$fechaNueva;
+            $date_to = $fechaNueva;
         }
         if ($date_from && $date_to) {
             $query->whereBetween('order_date', [$date_from, $date_to]);
@@ -95,17 +90,61 @@ class OrdersQuery
     {
         return Orders::where('status', 'PAID')
             ->update([
-                'status' => 'COMMISSIONG',
+                'status' => 'COMMISSIONING',
                 'updated_at' => now(),
             ]);
     }
 
     public function moveAllPaidToProcessed(): int
     {
-        return Orders::where('status', 'COMMISSIONG')
+        return Orders::where('status', 'COMMISSIONING')
             ->update([
                 'status' => 'PROCESSED',
                 'updated_at' => now(),
             ]);
+    }
+
+    public function getWaiterCommissions($status, $sort, $date_from, $date_to)
+    {
+        $dateBindings = [];
+        $whereClauses = [];
+
+        if ($date_from) {
+            $whereClauses[] = 'o.order_date >= ?';
+            $dateBindings[] = $date_from;
+        }
+        if ($date_to) {
+            $whereClauses[] = 'o.order_date <= ?';
+            $dateBindings[] = $date_to;
+        }
+
+        $whereSql = '';
+        if (!empty($whereClauses)) {
+            $whereSql = 'AND ' . implode(' AND ', $whereClauses);
+        }
+
+        $direction = strtolower($sort) === 'asc' ? 'ASC' : 'DESC';
+        $orderBy = "ORDER BY waiter_id {$direction}";
+
+        $sql = "
+            SELECT data.waiter_id, sum(price_final) price, sum(data.waiter_comision) waiter_comision
+            FROM (
+                SELECT o.id, o.status, o.order_date, o.waiter_id, o.price_final, o.waiter_comision
+                FROM orders o
+                WHERE o.status = ? {$whereSql}
+                UNION
+                SELECT o.id, o.status, o.order_date, ow.waiter_id, 0 price_final, ow.comision waiter_comision
+                FROM orders o
+                JOIN order_details od ON o.id = od.order_id
+                JOIN order_waiters ow ON ow.order_det_id = od.id
+                WHERE o.status = ? AND od.type = 'WAITER' {$whereSql}
+            ) data
+            GROUP BY data.waiter_id
+            {$orderBy}
+        ";
+
+        $finalBindings = array_merge([$status], $dateBindings, [$status], $dateBindings);
+
+        return DB::select($sql, $finalBindings);
     }
 }
