@@ -49,4 +49,6 @@ class WaiterCommission extends Model
     {
         return $this->belongsTo(Users::class, 'waiter_id', 'id');
     }
+    protected $with = ['waiter'];
+
 }

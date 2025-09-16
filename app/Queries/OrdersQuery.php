@@ -106,6 +106,11 @@ class OrdersQuery
 
     public function getWaiterCommissions($status, $sort, $date_from, $date_to)
     {
+        if ($date_to) {
+            $fechaNueva = date('Y-m-d', strtotime($date_to . ' +1 day'));
+            $date_to = $fechaNueva;
+        }
+        
         $dateBindings = [];
         $whereClauses = [];
 
