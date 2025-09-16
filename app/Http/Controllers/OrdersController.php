@@ -248,4 +248,45 @@ class OrdersController extends Controller
     {
         return $this->ordersService->moveAllPaidToProcessed();
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/orders/waiter-commissions",
+     *     summary="Get waiter commissions",
+     *     tags={"Orders"},
+     *     security={{"csrf":{}}},
+     *     @OA\Parameter(name="status", in="query", required=true, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="sort", in="query", @OA\Schema(type="string", enum={"asc", "desc"})),
+     *     @OA\Parameter(name="date_from", in="query", @OA\Schema(type="string", format="date")),
+     *     @OA\Parameter(name="date_to", in="query", @OA\Schema(type="string", format="date")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
+     */
+    public function getWaiterCommissions(Request $request)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string',
+            'sort' => 'sometimes|string|in:asc,desc',
+            'date_from' => 'sometimes|date',
+            'date_to' => 'sometimes|date',
+        ]);
+
+        $params = [
+            'status' => $validated['status'],
+            'sort' => $validated['sort'] ?? 'desc',
+            'date_from' => $validated['date_from'] ?? null,
+            'date_to' => $validated['date_to'] ?? null,
+        ];
+
+        $commissions = $this->ordersService->getWaiterCommissions($params);
+
+        return response()->json($commissions);
+    }
 }

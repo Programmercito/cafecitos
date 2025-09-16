@@ -119,4 +119,22 @@ class OrdersService
     {
         return $this->ordersQuery->moveAllPaidToProcessed();
     }
+
+    public function getWaiterCommissions(array $params)
+    {
+        $status = $params['status'];
+        $sort = $params['sort'];
+        $date_from = $params['date_from'];
+        $date_to = $params['date_to'];
+
+        $rawResults = $this->ordersQuery->getWaiterCommissions($status, $sort, $date_from, $date_to);
+
+        // Hydrate the raw results into a collection of WaiterCommission models
+        $commissions = \App\Models\WaiterCommission::hydrate($rawResults);
+
+        // Eager load the waiter relationship for each commission
+        $commissions->load('waiter');
+
+        return $commissions;
+    }
 }

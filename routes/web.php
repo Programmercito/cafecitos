@@ -67,6 +67,7 @@ Route::prefix('api/')->group(function () {
     Route::middleware(['auth', 'role:ADMINISTRATOR'])->group(function () {
         Route::put('/orders/move-to-commissiong', [OrdersController::class, 'moveToCommissiong']);
         Route::put('/orders/move-to-processed', [OrdersController::class, 'moveToProcessed']);
+        Route::get('/orders/waiter-commissions', [OrdersController::class, 'getWaiterCommissions']);
     });
 
     // -----------------------
