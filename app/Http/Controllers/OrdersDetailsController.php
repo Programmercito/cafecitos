@@ -68,7 +68,7 @@ class OrdersDetailsController extends Controller
                         $orderDetail->refresh();
                     }
                 }
-            }else{
+            } else {
                 // elimino el detalle de OrdersWaiters si es otro valor
                 $orderDetail->waiters()->detach();
                 $orderDetail->refresh();
@@ -109,6 +109,7 @@ class OrdersDetailsController extends Controller
             'quantity' => 'required|integer',
             'type' => 'required|string',
             'observation' => 'nullable|string',
+            'entregado' => 'nullable|integer'
         ];
         $validatedData = $this->validate($rules, $request);
         if (!$this->validaType($validatedData['type'])) {
@@ -212,5 +213,25 @@ class OrdersDetailsController extends Controller
         }
 
         return response()->json($result, 200);
+    }
+
+    public function pending()
+    {
+        $listOrdersdetail = $this->ordersDetailsService->pending();
+        if ($listOrdersdetail) {
+            return response()->json($listOrdersdetail, 200);
+        } else {
+            return response()->json(['message' => 'Order detail not found'], 404);
+        }
+    }
+
+    public function changepending($id)
+    {
+        $detail = $this->ordersDetailsService->changePending($id);
+        if ($detail) {
+            return response()->json($detail, 200);
+        } else {
+            return response()->json(['message' => 'Order no encontrada'], 404);
+        }
     }
 }

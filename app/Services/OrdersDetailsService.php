@@ -85,4 +85,14 @@ class OrdersDetailsService extends Service
             throw new \InvalidArgumentException('Invalid product');
         }
     }
+
+    public function pending()
+    {
+        return $this->ordersDetailsQuery->pendings();
+    }
+
+    public function changePending($id)
+    {
+        return OrdersDetails::where('id', $id)->update(['entregado' => 1]);
+    }
 }
