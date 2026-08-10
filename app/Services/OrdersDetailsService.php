@@ -26,7 +26,7 @@ class OrdersDetailsService extends Service
 
     public function findbyOrderId($orderId)
     {
-        return $this->ordersDetailsQuery->getByOrderId($orderId);
+        return $this->ordersDetailsQuery->getByOrderId((int) $orderId);
     }
 
     public function find($id)
