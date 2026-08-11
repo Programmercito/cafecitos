@@ -29,7 +29,7 @@ class OrdersDetailsQuery
             ->join('ORDERS as o', 'o.id', '=', 'ORDER_DETAILS.order_id')
             ->join('USERS as u', 'u.id', '=', 'o.waiter_id')
             ->whereIn('o.status', ['OPEN', 'CLOSED'])
-            ->orderBy('order_details.id', 'desc');
+            ->orderBy('ORDER_DETAILS.id', 'desc');
         return $query->get();
     }
 }

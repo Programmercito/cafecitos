@@ -37,6 +37,7 @@ class OrdersDetails extends Model
         'price',
         'type',
         'observation',
+        'entregado',
     ];
 
     protected $casts = [
@@ -46,6 +47,7 @@ class OrdersDetails extends Model
         'price'       => 'decimal:2',
         'type'        => 'string',
         'observation' => 'string',
+        'entregado'   => 'boolean',
     ];
 
     protected $with = ['product','orderWaiters'];
