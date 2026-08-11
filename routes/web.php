@@ -79,6 +79,8 @@ Route::prefix('api/')->group(function () {
         Route::delete('/order-details/{id}', [OrdersDetailsController::class, 'delete']);
         Route::put('/order-waiters/{id}', [OrdersWaitersController::class, 'update']);
         Route::delete('/order-waiters/{id}', [OrdersWaitersController::class, 'delete']);
+        Route::get('/order-details/pending', [OrdersDetailsController::class, 'pending']);
+        Route::put('/order-details/pending/{id}', [OrdersDetailsController::class, 'changepending']);
     });
 
     // -----------------------
