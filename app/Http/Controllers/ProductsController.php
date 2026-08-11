@@ -187,7 +187,12 @@ class ProductsController extends Controller
     public function uploadImage(Request $request, $id)
     {
         $validated = $request->validate([
-            'image' => 'required|file|mimes:png',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ], [
+            'image.required' => 'Debes seleccionar una imagen.',
+            'image.image' => 'El archivo debe ser una imagen.',
+            'image.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg, gif o webp.',
+            'image.max' => 'La imagen no debe superar los 5 MB.',
         ]);
         $product = $this->productsService->find($id);
         if (!$product) {

@@ -56,13 +56,5 @@ class Products extends Model
         'is_active' => 'boolean',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'image',
-    ];
 }
 

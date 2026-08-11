@@ -2,6 +2,9 @@
 
 namespace App\Resources;
 
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+
 class ValidateService
 {
     public static function validateModel($rules, $request)
@@ -9,7 +12,9 @@ class ValidateService
         $extraFields = array_diff(array_keys($request->all()), array_keys($rules));
 
         if (!empty($extraFields)) {
-            return response()->json(['message' => 'Campos adicionales no permitidos: ' . implode(', ', $extraFields)], 422);
+            throw ValidationException::withMessages([
+                'extra' => 'Campos adicionales no permitidos: ' . implode(', ', $extraFields),
+            ]);
         }
 
         $validatedData = $request->validate($rules);
